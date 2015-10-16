@@ -3,6 +3,7 @@ from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from .views import home_page
 from django.template.loader import render_to_string
+from .models import Item
 
 
 # Create your tests here.
@@ -33,3 +34,19 @@ class SmokeTest(TestCase):
                                          {'new_item_text': 'A new list item'}
                                          )
         self.assertEqual(expected_html, response.content.decode())
+
+class ItemModelTest(TestCase):
+
+    def test_saving_and_retrieving_items(self):
+        first_item = Item()
+        first_item.text = 'The first list item'
+        first_item.save()
+
+        second_item = Item()
+        second_item.text = 'The second item'
+        second_item.save()
+
+        saved_items = Item.objects.all()
+        self.assertEqual(saved_items.count(), 2)
+        self.assertEqual(saved_items[0].text, 'The first list item')
+        self.assertEqual(saved_items[1].text, 'The second item')
