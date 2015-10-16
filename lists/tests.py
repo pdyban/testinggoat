@@ -39,6 +39,12 @@ class SmokeTest(TestCase):
                                          )
         self.assertEqual(expected_html, response.content.decode())
 
+    def test_home_page_saves_items_only_when_necessary(self):
+        request = HttpRequest()
+        response = home_page(request)
+
+        self.assertEqual(Item.objects.count(), 0)
+
 class ItemModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
